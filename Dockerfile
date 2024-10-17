@@ -1,6 +1,4 @@
-#FROM rocm61_pt23:v2
-FROM rocm61_pt24:v1
-ARG SD_BRANCH="rocm5.7"
+FROM rocm62_pt24:latest
 SHELL ["/bin/bash", "-c"]  
 ENV PORT=8188 \
     DEBIAN_FRONTEND=noninteractive \
@@ -48,6 +46,7 @@ RUN touch comfi.sh && \
     true
 
 RUN python -m venv venv && \
+    ./venv/bin/python -m pip install --upgrade pip && \
     ./venv/bin/pip install psutil && \
     ./venv/bin/pip install -r requirements.txt && \
     ./venv/bin/pip uninstall -y torch torchvision && \    
@@ -55,7 +54,7 @@ RUN python -m venv venv && \
     ./venv/bin/pip install /vision/dist/torchvision-*-cp310-cp310-linux_x86_64.whl && \
     ./venv/bin/python -m pip install -e /pyrsmi/. && \
     ./venv/bin/python -m pip uninstall numpy -y && \
-    ./venv/bin/python pip install numpy==1.26.4 && \
+    ./venv/bin/pip install numpy==1.26.4 && \
     true    
 
 WORKDIR /ComfyUI/custom_nodes
